@@ -21,8 +21,8 @@ class MessageService(
     private val menuKeyboard: MenuKeyboard,
     private val inlineKeyboard: InlineKeyboard
 ) {
-    private val photoFile: File = ClassPathResource("static/firstPost.jpg").file
-    private val pdfFile: File = ClassPathResource("static/book.pdf").file
+    private val photoFile = File("/opt/files/firstPost.jpg")
+    private val pdfFile = File("/opt/files/book.pdf")
 
     fun sendWelcomeMessage(chatId: Long) {
         val message = SendMessage().apply {
