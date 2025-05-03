@@ -1,7 +1,7 @@
 package com.gr.zland.servis
 
 import com.gr.zland.model.PickupLocation
-import com.gr.zland.repozitory.PickupLocationRepository
+import com.gr.zland.repository.PickupLocationRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import kotlin.math.*

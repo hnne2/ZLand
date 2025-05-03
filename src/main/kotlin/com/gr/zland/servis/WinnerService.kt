@@ -1,7 +1,7 @@
 package com.gr.zland.servis
 
 import com.gr.zland.model.Winner
-import com.gr.zland.repozitory.WinnerRepository
+import com.gr.zland.repository.WinnerRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

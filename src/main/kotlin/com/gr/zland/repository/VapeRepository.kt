@@ -1,8 +1,8 @@
-package com.gr.zland.repozitory
+package com.gr.zland.repository
 
-import com.gr.zland.model.Winner
+import com.gr.zland.model.Vape
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface WinnerRepository : JpaRepository<Winner, Long>
+interface VapeRepository : JpaRepository<Vape, Long>

@@ -19,7 +19,7 @@ class MessageHandler(
             "🧬 О продукте Zland" -> messageService.sendProductInfo(chatId)
             "🔥 ТОП-15 миксов" -> messageService.sendFileWithTastes(chatId)
             "🍓 Вкусы" -> messageService.sendMessage(chatId, "Выберите категорию вкусов!")
-            "🎁 Розыгрыш" -> messageService.sendMessage(chatId, "Участвуй в розыгрыше призов!")
+            "🎁 Розыгрыш" -> messageService.sendMiniAppForRaffle(chatId, "https://google.com/");
             "📍 Где купить?" -> messageService.requestLocation(chatId)
             "💬 Чат поддержки" -> messageService.sendMessage(chatId, "Свяжитесь с поддержкой: @ZlandSupport")
             "🤝 Партнерство" -> messageService.sendMessage(chatId, "Узнайте об условиях партнерства!")

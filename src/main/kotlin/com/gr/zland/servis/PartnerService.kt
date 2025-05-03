@@ -1,7 +1,7 @@
 package com.gr.zland.servis
 
 import com.gr.zland.model.Partner
-import com.gr.zland.repozitory.PartnerRepository
+import com.gr.zland.repository.PartnerRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

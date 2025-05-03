@@ -9,9 +9,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendDocument
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.objects.InputFile
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import java.io.File
 
@@ -109,5 +112,22 @@ class MessageService(
         } catch (e: TelegramApiException) {
             e.printStackTrace()
         }
+    }
+    fun sendMiniAppForRaffle(chatId: Long, miniAppUrl: String) {
+        val message = SendMessage().apply {
+            this.chatId = chatId.toString();
+            text = "Участвуй в розыгрыше призов! Нажми, чтобы открыть! 🎁";
+            replyMarkup = InlineKeyboardMarkup().apply {
+                keyboard = listOf(
+                    listOf(
+                        InlineKeyboardButton().apply {
+                            text = "Открыть розыгрыш";
+                            webApp = WebAppInfo(miniAppUrl);
+                        }
+                    )
+                );
+            };
+        };
+        execute(message);
     }
 }

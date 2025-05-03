@@ -1,7 +1,7 @@
 package com.gr.zland.servis
 
 import com.gr.zland.model.RaffleSettings
-import com.gr.zland.repozitory.RaffleSettingsRepository
+import com.gr.zland.repository.RaffleSettingsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

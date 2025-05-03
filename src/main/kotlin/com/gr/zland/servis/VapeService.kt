@@ -1,7 +1,7 @@
 package com.gr.zland.servis
 
 import com.gr.zland.model.Vape
-import com.gr.zland.repozitory.VapeRepository
+import com.gr.zland.repository.VapeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
