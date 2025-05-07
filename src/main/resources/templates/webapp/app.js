@@ -10,32 +10,25 @@ function authenticate() {
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include', // <--- обязательно
         body: JSON.stringify({ initData }),
     })
-        .then(data => {
-            if (data.success) {
-                document.getElementById('user-info').innerText = 'Authenticated via cookies!';
-                // Можно загрузить данные, сделать редирект и т.п.
-            } else {
-                document.getElementById('user-info').innerText = 'Authentication failed: ' + (data.error || 'Unknown error');
+        .then(async response => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Server responded with ${response.status}: ${errorText}`);
             }
+            return response.json(); // безопасно, так как response.ok === true
         })
-        .then(response => response.json())
         .then(data => {
             if (data.token) {
                 localStorage.setItem('token', data.token);
                 document.getElementById('user-info').innerText = 'Authenticated! Token saved.';
-                // Дополнительная логика, например, загрузка данных
             } else {
                 document.getElementById('user-info').innerText = 'Authentication failed: ' + (data.error || 'Unknown error');
             }
         })
         .catch(error => {
             document.getElementById('user-info').innerText = 'Error: ' + error.message;
+            console.error('Ошибка аутентификации:', error);
         });
-
 }
-
-// Инициализация
-window.Telegram.WebApp.ready();

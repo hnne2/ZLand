@@ -24,8 +24,8 @@ class MessageService(
     private val menuKeyboard: MenuKeyboard,
     private val inlineKeyboard: InlineKeyboard
 ) {
-    private val photoFile = File("/opt/files/firstPost.jpg")
-    private val pdfFile = File("/opt/files/book.pdf")
+//    private val photoFile = File("/opt/files/firstPost.jpg")
+//    private val pdfFile = File("/opt/files/book.pdf")
 
     fun sendWelcomeMessage(chatId: Long) {
         val message = SendMessage().apply {
@@ -48,7 +48,7 @@ class MessageService(
     fun sendProductInfo(chatId: Long) {
         val photo = SendPhoto().apply {
             this.chatId = chatId.toString()
-            photo = InputFile(photoFile)
+          //  photo = InputFile(photoFile)
             caption = """
                 MIX IT UP VAPE IT OUT
                 Vaprig sivica Kit for Zidon minipots
@@ -65,7 +65,7 @@ class MessageService(
     fun sendFileWithTastes(chatId: Long) {
         val photo = SendPhoto().apply {
             this.chatId = chatId.toString()
-            photo = InputFile(photoFile)
+            //photo = InputFile(photoFile)
             caption = "Познакомьтесь с топ-15 миксовых сочетаний 👇"
             replyMarkup = inlineKeyboard.createTastesKeyboard()
         }
@@ -76,7 +76,7 @@ class MessageService(
         val document = SendDocument().apply {
             this.chatId = chatId.toString()
             caption = "Вот PDF с топ-15 сочетаниями 🍹"
-            document = InputFile(pdfFile)
+           // document = InputFile(pdfFile)
         }
         execute(document)
     }

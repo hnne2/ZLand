@@ -9,6 +9,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 class JwtAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilter() {
     override fun doFilterInternal(
@@ -21,7 +22,8 @@ class JwtAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
             val token = header.substring(7)
             if (jwtUtil.validateToken(token)) {
                 val userId = jwtUtil.getUserIdFromToken(token)
-                val userDetails = User(userId, "", emptyList())
+                val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
+                val userDetails = User(userId, "", authorities)
                 val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
                 SecurityContextHolder.getContext().authentication = authentication

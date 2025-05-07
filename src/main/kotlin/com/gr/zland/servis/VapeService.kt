@@ -37,4 +37,7 @@ class VapeService @Autowired constructor(
     fun findAll(): List<Vape> {
         return vapeRepository.findAll()
     }
+    fun getAllCategories():List<String>{
+    return vapeRepository.getAllCategories()
+    }
 }
