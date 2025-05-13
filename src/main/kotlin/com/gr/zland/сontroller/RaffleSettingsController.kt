@@ -4,6 +4,7 @@ package com.gr.zland.сontroller
 import com.gr.zland.dto.*
 import com.gr.zland.servis.RaffleSettingsService
 import com.gr.zland.servis.myTelegramUserService
+import jakarta.persistence.OptimisticLockException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -83,9 +84,17 @@ class RaffleSettingsController (
 
         telegramUser.spins = request.countSpins
         if (request.isWin) {
-            // Если выигрыш, уменьшаем количество доступных призов
-            settings.maxPrizes -= 1
-            raffleSettingsService.save(settings)
+            try {
+                raffleSettingsService.decrementPrizesIfWin(settings)
+            } catch (e: OptimisticLockException) {
+                return ResponseEntity.status(409).body(
+                    UpdateSpinsResponseDto(
+                        success = false,
+                        isEnded = true,
+                        message = "Кто-то успел раньше — призов больше нет"
+                    )
+                )
+            }
         }
         userService.save(telegramUser)
 

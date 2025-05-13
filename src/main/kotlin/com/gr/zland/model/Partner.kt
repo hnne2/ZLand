@@ -13,16 +13,16 @@ data class Partner(
     val name: String,
 
     @Column(name = "phone", nullable = false, length = 20)
-    val phone: String,
+    val tel: String,
 
     @Column(name = "email", length = 255)
     val email: String? = null,
 
     @Column(name = "telegram_nick", length = 100)
-    val telegramNick: String? = null,
+    val telegram: String? = null,
 
     @Column(name = "message", columnDefinition = "TEXT")
-    val message: String? = null,
+    val comment: String? = null,
 
     @Column(name = "created_at", nullable = false)
     val createdAt: Long,

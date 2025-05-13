@@ -21,10 +21,10 @@ class PartnerService @Autowired constructor(
         val existingPartner = findById(id) ?: return null
         val partnerToUpdate = existingPartner.copy(
             name = updatedPartner.name,
-            phone = updatedPartner.phone,
+            tel = updatedPartner.tel,
             email = updatedPartner.email,
-            telegramNick = updatedPartner.telegramNick,
-            message = updatedPartner.message,
+            telegram = updatedPartner.telegram,
+            comment = updatedPartner.comment,
             createdAt = updatedPartner.createdAt,
             updatedAt = updatedPartner.updatedAt
         )

@@ -2,6 +2,7 @@ package com.gr.zland.servis
 
 import com.gr.zland.model.RaffleSettings
 import com.gr.zland.repository.RaffleSettingsRepository
+import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -47,5 +48,10 @@ class RaffleSettingsService (
     }
     fun save(raffleSettings: RaffleSettings){
         raffleSettingsRepository.save(raffleSettings)
+    }
+    @Transactional
+    fun decrementPrizesIfWin(settings: RaffleSettings): RaffleSettings {
+        settings.maxPrizes -= 1
+        return raffleSettingsRepository.save(settings)
     }
 }

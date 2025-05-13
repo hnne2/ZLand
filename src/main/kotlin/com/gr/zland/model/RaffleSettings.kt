@@ -34,5 +34,9 @@ data class RaffleSettings(
     val createdAt: Long,
 
     @Column(name = "updated_at", nullable = false)
-    val updatedAt: Long
+    val updatedAt: Long,
+
+    @Version
+    @Column(name = "version")
+    var version: Long? = null
 )
