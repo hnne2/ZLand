@@ -1,4 +1,4 @@
-package com.gr.zland.util
+package com.gr.zland.sequrity
 
 
 import io.jsonwebtoken.Jwts

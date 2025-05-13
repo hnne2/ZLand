@@ -1,19 +1,114 @@
 package com.gr.zland.сontroller
 
-import com.gr.zland.model.RaffleSettings
+
+import com.gr.zland.dto.*
 import com.gr.zland.servis.RaffleSettingsService
+import com.gr.zland.servis.myTelegramUserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/raffle-settings")
-class RaffleSettingsController @Autowired constructor(
-    private val raffleSettingsService: RaffleSettingsService
+class RaffleSettingsController (
+    private val raffleSettingsService: RaffleSettingsService,
+    private val userService: myTelegramUserService
 ) {
     @GetMapping
-    fun getAllRaffleSettings(): List<RaffleSettings> {
-        return raffleSettingsService.findAll()
+    fun getSpinnerData(@AuthenticationPrincipal user: UserDetails): SpinnerResponseDto {
+        val settings = raffleSettingsService.getLatest()
+        val telegramUser = userService.getTelegramUserById(user.username.toLong())
+        val spins = if (telegramUser!=null) telegramUser.spins?:20 else 0
+        return SpinnerResponseDto(
+            isEnded = settings.maxPrizes <= 0,
+            spinner = SpinnerData(
+                chanceToWin = settings.probability,
+                maxSpins = spins
+            ),
+            prize = PrizeData(
+                image = PrizeImage(
+                    url = settings.prizeImagePath ?: "",
+                    alt = settings.prize
+                ),
+                title = settings.prize,
+                message = "Поздравляем с выигрышем! Наш менеджер свяжется с вами, чтобы уточнить детали доставки"
+            ),
+            theEnd = TheEndData(
+                title = "Розыгрыш завершился",
+                description ="Все призы уже разыграны. Следующий розыгрыш не за горами — не упусти шанс снова испытать удачу"
+            ),
+            seo = SeoData(
+                H1 = "Вращайте барабан и выигрывайте призы!"
+            )
+        )
     }
+    @PostMapping("/update-spins")
+    fun updateSpins(
+        @AuthenticationPrincipal user: UserDetails,
+        @RequestBody request: UpdateSpinsRequestDto
+    ): ResponseEntity<UpdateSpinsResponseDto> {
+        val settings = raffleSettingsService.getLatest()
+        val telegramUser = userService.getTelegramUserById(user.username.toLong())
+            ?: return ResponseEntity.badRequest().body(
+                UpdateSpinsResponseDto(
+                    success = false,
+                    isEnded = settings.maxPrizes <= 0,
+                    message = "Пользователь не найден"
+                )
+            )
+
+
+        if (settings.maxPrizes <= 0) {
+            return ResponseEntity.ok(
+                UpdateSpinsResponseDto(
+                    success = false,
+                    isEnded = true,
+                    message = "Розыгрыш завершён"
+                )
+            )
+        }
+
+        val currentSpins = telegramUser.spins ?: 20
+        if (request.countSpins > currentSpins) {
+            return ResponseEntity.badRequest().body(
+                UpdateSpinsResponseDto(
+                    success = false,
+                    isEnded = settings.maxPrizes <= 0,
+                    message = "Превышено максимальное количество спинов"
+                )
+            )
+        }
+
+        telegramUser.spins = request.countSpins
+        if (request.isWin) {
+            // Если выигрыш, уменьшаем количество доступных призов
+            settings.maxPrizes -= 1
+            raffleSettingsService.save(settings)
+        }
+        userService.save(telegramUser)
+
+        return ResponseEntity.ok(
+            UpdateSpinsResponseDto(
+                success = true,
+                isEnded = settings.maxPrizes <= 0,
+                countSpins = telegramUser.spins,
+                message = "Количество спинов успешно обновлено"
+            )
+        )
+    }
+
 }
+data class UpdateSpinsRequestDto(
+    val countSpins: Int,
+    val isWin: Boolean
+)
+
+
+data class UpdateSpinsResponseDto(
+    val success: Boolean,
+    val isEnded: Boolean,
+    val countSpins: Int? = null,
+    val message: String? = null
+)

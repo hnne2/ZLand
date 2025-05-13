@@ -1,6 +1,5 @@
-package com.gr.zland.config
+package com.gr.zland.sequrity
 
-import com.gr.zland.util.JwtUtil
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User

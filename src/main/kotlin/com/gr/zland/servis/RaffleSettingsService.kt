@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class RaffleSettingsService @Autowired constructor(
+class RaffleSettingsService (
     private val raffleSettingsRepository: RaffleSettingsRepository
 ) {
     fun create(raffleSettings: RaffleSettings): RaffleSettings {
@@ -39,5 +39,13 @@ class RaffleSettingsService @Autowired constructor(
 
     fun findAll(): List<RaffleSettings> {
         return raffleSettingsRepository.findAll()
+    }
+
+    fun getLatest(): RaffleSettings {
+        return raffleSettingsRepository.findAll().maxByOrNull { it.updatedAt }
+            ?: throw NoSuchElementException("Raffle settings not found")
+    }
+    fun save(raffleSettings: RaffleSettings){
+        raffleSettingsRepository.save(raffleSettings)
     }
 }

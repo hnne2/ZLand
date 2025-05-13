@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface VapeRepository : JpaRepository<Vape, Long>{
-    @Query("SELECT SORT FROM vape;",nativeQuery = true)
-    fun getAllCategories():List<String>
+interface VapeRepository : JpaRepository<Vape, Long> {
+    @Query("SELECT DISTINCT sort FROM vape", nativeQuery = true)
+    fun getDistinctSorts(): List<String>
+
+    fun findAllBySort(sort: String): List<Vape>
 }

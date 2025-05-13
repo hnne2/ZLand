@@ -1,22 +1,18 @@
 package com.gr.zland.servis
 
 import com.gr.zland.model.TelegramUser
-import com.gr.zland.util.JwtUtil
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
+import com.gr.zland.sequrity.JwtUtil
 import org.json.JSONObject
 import org.springframework.stereotype.Service
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 @Service
-class TelegramAuthService(private val jwtUtil: JwtUtil, util: JwtUtil){
+class TelegramAuthService(private val jwtUtil: JwtUtil){
 
     private val botToken = "5653166571:AAGGDKYjD3YYNA0ahUWrzFMqfvVBgy_24AQ"
-    private val jwtSecret = "YOUR_JWT_SECRET"
 
     fun authenticate(initData: String): Pair<String,TelegramUser> {
         if (!verifyInitData(initData)) {
@@ -113,16 +109,5 @@ class TelegramAuthService(private val jwtUtil: JwtUtil, util: JwtUtil){
         return json.getLong("id")
     }
 
-    private fun generateJwtToken(userId: String): String {
-        val now = Date()
-        val expiry = Date(now.time + 3600000) // 1 час
-
-        return Jwts.builder()
-            .setSubject(userId)
-            .setIssuedAt(now)
-            .setExpiration(expiry)
-            .signWith(SignatureAlgorithm.HS256, jwtSecret.toByteArray())
-            .compact()
-    }
 }
 

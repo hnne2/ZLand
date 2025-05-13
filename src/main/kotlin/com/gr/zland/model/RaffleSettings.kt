@@ -22,7 +22,7 @@ data class RaffleSettings(
     val pickupLocation: String,
 
     @Column(name = "max_prizes", nullable = false)
-    val maxPrizes: Int = 10,
+    var maxPrizes: Int = 10,
 
     @Column(name = "latitude")
     val latitude: Float? = null,
