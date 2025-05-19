@@ -27,5 +27,8 @@ data class Vape(
     val sourness: Float,
 
     @Column(name = "image_path", length = 255)
-    val imagePath: String? = null
+    val imagePath: String? = null,
+
+    @Column(name = "is_top15", nullable = false)
+    val isTop15: Boolean = false
 )

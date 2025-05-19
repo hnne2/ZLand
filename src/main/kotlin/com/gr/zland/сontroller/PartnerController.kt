@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/partners")
+@RequestMapping("/apiZ/partners")
 class PartnerController @Autowired constructor(
     private val partnerService: PartnerService
 ) {

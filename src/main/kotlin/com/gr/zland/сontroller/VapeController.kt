@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/vapes")
+@RequestMapping("/apiZ/vapes")
 class VapeController @Autowired constructor(
     private val vapeService: VapeService
 ) {

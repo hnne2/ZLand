@@ -3,6 +3,7 @@ package com.gr.zland.servis
 import com.gr.zland.model.TelegramUser
 import com.gr.zland.sequrity.JwtUtil
 import org.json.JSONObject
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -12,7 +13,8 @@ import javax.crypto.spec.SecretKeySpec
 @Service
 class TelegramAuthService(private val jwtUtil: JwtUtil){
 
-    private val botToken = "5653166571:AAGGDKYjD3YYNA0ahUWrzFMqfvVBgy_24AQ"
+    @Value("\${telegram.bot.token}")
+    private lateinit var botToken:String
 
     fun authenticate(initData: String): Pair<String,TelegramUser> {
         if (!verifyInitData(initData)) {

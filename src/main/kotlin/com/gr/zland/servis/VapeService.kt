@@ -3,12 +3,14 @@ package com.gr.zland.servis
 import com.gr.zland.dto.*
 import com.gr.zland.model.*
 import com.gr.zland.repository.VapeRepository
+import com.gr.zland.сontroller.ImageController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class VapeService @Autowired constructor(
-    private val vapeRepository: VapeRepository
+    private val vapeRepository: VapeRepository,
+    private val imageController: ImageController
 ) {
     fun create(vape: Vape): Vape {
         return vapeRepository.save(vape)
@@ -40,30 +42,36 @@ class VapeService @Autowired constructor(
     }
 
     fun getAllCategories(): List<CategoryDto> {
-        val sorts = vapeRepository.getDistinctSorts()
+        val categories = listOf(
+            "Фрукты" to "icon-fruits.png",
+            "Десерты" to "icon-desserts.png",
+            "Классика" to "icon-classic.png",
+            "Напитки" to "icon-drinks.png",
+            "Растения" to "icon-plants.png",
+            "Миксы" to "icon-mixes.png"
+        )
 
-        return sorts.mapIndexed { index, sort ->
+        return categories.mapIndexed { index, (name, icon) ->
             CategoryDto(
                 id = index.toLong(),
                 icon = IconDto(
-                    url = "/icons/a.svg", // можно динамически подставлять
-                    alt = sort
+                    url = "/$icon",
+                    alt = name
                 ),
                 link = LinkDto(
-                    to = sort.lowercase(),
-                    label = sort
+                    to = name.lowercase(),
+                    label = name
                 )
             )
         }
     }
 
     fun getCatalogBySlug(slug: String): CatalogResponse {
-        val vapes = if (slug == "all") {
-            vapeRepository.findAll()
-        } else {
-            vapeRepository.findAllBySort(slug)
+        val vapes = when (slug) {
+            "all" -> vapeRepository.findAll()
+            "top" -> vapeRepository.getTop15()
+            else -> vapeRepository.findAllBySort(slug)
         }
-
         val products = vapes.map { vape ->
             ProductDto(
                 id = vape.id,
@@ -77,7 +85,7 @@ class VapeService @Autowired constructor(
                     url = if (!vape.imagePath.isNullOrBlank()) "/${vape.imagePath}" else "/images/a.png",
                     alt = vape.flavorList
                 ),
-                isTop = false,
+                isTop = vape.isTop15,
                 parameters = listOf(
                     ParameterDto(1, "Сладость", vape.sweetness.toString()),
                     ParameterDto(2, "Холодок", vape.iceLevel.toString()),
@@ -87,7 +95,7 @@ class VapeService @Autowired constructor(
         }
 
         return CatalogResponse(
-            seo = SeoDto(H1 = slug.replaceFirstChar { it.uppercase() } + " вкусы"),
+            seo = SeoDto(h1 = slug.replaceFirstChar { it.uppercase() }),
             specification = generateSpecification(slug),
             products = products
         )
@@ -96,9 +104,12 @@ class VapeService @Autowired constructor(
     // Пример генерации описания
     private fun generateSpecification(slug: String): String {
         return when (slug.lowercase()) {
-            "fruits" -> "<ul><li>Фруктовая основа</li><li>Освежающие</li></ul>"
+            "фрукты" -> "<ul><li>До 900 затяжек;</li><li>35 вкусов: 1.9% солевой никотин;</li><li>Объем бака 2 мл;</li><li>Подходят для устройства Zland Mini;</li><li>Регулируемая мощность;</li><li>Двойная сетчатая спираль</li></ul>"
             "mint" -> "<ul><li>Ментоловая свежесть</li></ul>"
             else -> "<ul><li>Описание отсутствует</li></ul>"
         }
+    }
+    fun getTop15(): List<Vape> {
+        return vapeRepository.getTop15()
     }
 }

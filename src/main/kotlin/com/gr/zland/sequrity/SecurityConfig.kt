@@ -19,14 +19,15 @@ class SecurityConfig(private val jwtUtil: JwtUtil) {
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers(
-                    "/api/auth/telegram",
+                    "/apiZ/auth/telegram",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/v3/api-docs",
                     "/swagger-ui.html",
                     "/webapp",
                     "/webapp/**",
-                    "/api/images/**"
+                    "/apiZ/images/**",
+                    "/apiZ/vapes/categories/**"
                 ).permitAll()
                     .anyRequest().authenticated()
             }

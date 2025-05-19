@@ -6,7 +6,7 @@ data class CatalogResponse(
     val products: List<ProductDto>
 )
 
-data class SeoDto(val H1: String)
+data class SeoDto(val h1: String)
 
 data class ImageDto(
     val url: String,

@@ -13,7 +13,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 fun corsConfigurationSource(): CorsConfigurationSource {
     val config = CorsConfiguration().apply {
         allowCredentials = true
+        // Можно добавить несколько origin, если надо
         addAllowedOrigin("http://localhost:3000")
+        addAllowedOrigin("https://zland.demo.onlinebees.ru")
         addAllowedHeader("*")
         addAllowedMethod("*")
     }

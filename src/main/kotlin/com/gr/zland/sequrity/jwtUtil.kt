@@ -16,7 +16,6 @@ class JwtUtil(
         return Jwts.builder()
             .setSubject(userId)
             .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + expirationMs))
             .signWith(SignatureAlgorithm.HS512, secret)
             .compact()
     }

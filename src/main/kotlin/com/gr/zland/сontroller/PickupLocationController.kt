@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/pickup-locations")
+@RequestMapping("/apiZ/pickup-locations")
 class PickupLocationController @Autowired constructor(
     private val pickupLocationService: PickupLocationService
 ) {

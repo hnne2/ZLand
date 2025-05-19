@@ -15,7 +15,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 @RestController
-@RequestMapping("/api/images")
+@RequestMapping("/apiZ/images")
 class ImageController {
 
     private val uploadDir: Path = Paths.get("uploads")

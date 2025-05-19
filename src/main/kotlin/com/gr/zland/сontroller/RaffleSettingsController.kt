@@ -2,7 +2,9 @@ package com.gr.zland.сontroller
 
 
 import com.gr.zland.dto.*
+import com.gr.zland.model.Winner
 import com.gr.zland.servis.RaffleSettingsService
+import com.gr.zland.servis.WinnerService
 import com.gr.zland.servis.myTelegramUserService
 import jakarta.persistence.OptimisticLockException
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,12 +12,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.LocalTime
 
 @RestController
-@RequestMapping("/api/raffle-settings")
+@RequestMapping("/apiZ/raffle-settings")
 class RaffleSettingsController (
     private val raffleSettingsService: RaffleSettingsService,
-    private val userService: myTelegramUserService
+    private val userService: myTelegramUserService,
+    private val winnerService: WinnerService
 ) {
     @GetMapping
     fun getSpinnerData(@AuthenticationPrincipal user: UserDetails): SpinnerResponseDto {
@@ -86,6 +91,16 @@ class RaffleSettingsController (
         if (request.isWin) {
             try {
                 raffleSettingsService.decrementPrizesIfWin(settings)
+                val winner = Winner(
+                    phone = "",
+                    telegramNick = telegramUser.username ?: "",
+                    date = LocalDate.now(),
+                    time = LocalTime.now(),
+                    prize = settings.prize,
+                    createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis()
+                )
+                winnerService.create(winner)
             } catch (e: OptimisticLockException) {
                 return ResponseEntity.status(409).body(
                     UpdateSpinsResponseDto(

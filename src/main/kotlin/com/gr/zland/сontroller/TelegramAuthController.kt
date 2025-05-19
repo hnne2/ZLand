@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/apiZ/auth")
 class TelegramAuthController(
     private val telegramAuthService: TelegramAuthService,
     private val userService: myTelegramUserService
@@ -27,6 +27,7 @@ class TelegramAuthController(
     @PostMapping("/telegram")
     fun authenticate(@RequestBody request: TelegramAuthRequest): ResponseEntity<Any> {
         return try {
+            println(request.initData)
             val (token, telegramUser) = telegramAuthService.authenticate(request.initData)
             val user = userService.getOrCreateUser(telegramUser)
             ResponseEntity.ok(AuthResponse(token, user))

@@ -11,4 +11,6 @@ interface VapeRepository : JpaRepository<Vape, Long> {
     fun getDistinctSorts(): List<String>
 
     fun findAllBySort(sort: String): List<Vape>
+    @Query("SELECT * FROM vape WHERE is_top15 = true", nativeQuery = true)
+    fun getTop15(): List<Vape>
 }
