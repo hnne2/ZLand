@@ -6,16 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 @Component
 class InlineKeyboard {
-    fun createProductInfoKeyboard(): InlineKeyboardMarkup {
-        val button = InlineKeyboardButton().apply {
-            text = "Подробнее"
-            url = "https://zland-website.com"
-        }
-        return InlineKeyboardMarkup().apply {
-            keyboard = listOf(listOf(button))
-        }
-    }
-
     fun createTastesKeyboard(): InlineKeyboardMarkup {
         val button = InlineKeyboardButton().apply {
             text = "Подробнее"

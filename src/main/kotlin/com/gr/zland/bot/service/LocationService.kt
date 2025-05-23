@@ -3,6 +3,7 @@ package com.gr.zland.bot.service
 import com.gr.zland.bot.keyboard.MenuKeyboard
 import com.gr.zland.bot.model.PickupPoint
 import com.gr.zland.bot.utils.calculateDistance
+import com.gr.zland.model.PickupLocation
 import com.gr.zland.servis.PickupLocationService
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -34,6 +35,9 @@ class LocationService(
                 text = "📍 ${index + 1}) ${point.name} \n ${point.address}"
                 if (index == nearestLocations.lastIndex) {
                     replyMarkup = menuKeyboard.create()
+                    val mapUrl = buildGoogleMapUrl(nearestLocations)
+                    val urlMessage = SendMessage(chatId, "🗺 Все точки на карте: $mapUrl")
+                    bot.execute(urlMessage)
                 }
             }
 
@@ -45,6 +49,25 @@ class LocationService(
 
             bot.execute(textMessage)
             bot.execute(locationMessage)
+        }
+    }
+    fun buildGoogleMapUrl(points: List<PickupLocation>): String {
+        if (points.isEmpty()) return "https://maps.google.com"
+
+        // Первая точка — как конечный пункт (destination)
+        val destination = "${points.first().latitude},${points.first().longitude}"
+
+        // Остальные точки — как промежуточные (waypoints)
+        val waypoints = points.drop(1).joinToString("|") { point ->
+            "${point.latitude},${point.longitude}"
+        }
+
+        return buildString {
+            append("https://www.google.com/maps/dir/?api=1")
+            append("&destination=$destination")
+            if (waypoints.isNotEmpty()) {
+                append("&waypoints=$waypoints")
+            }
         }
     }
 

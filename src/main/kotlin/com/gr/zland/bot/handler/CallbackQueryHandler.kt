@@ -13,7 +13,7 @@ class CallbackQueryHandler(
         val chatId = callbackQuery.message.chatId
 
         if (callbackData == "send_pdf_tastes") {
-            messageService.sendFileWithTastes(chatId)
+            messageService.sendPdfWithTastes(chatId)
         }
     }
 }

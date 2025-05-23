@@ -30,5 +30,7 @@ data class Vape(
     val imagePath: String? = null,
 
     @Column(name = "is_top15", nullable = false)
-    val isTop15: Boolean = false
+    val isTop15: Boolean = false,
+    @Column(name = "isactive", nullable = false)
+    val isActive: Boolean = false
 )

@@ -38,7 +38,7 @@ class VapeService @Autowired constructor(
     }
 
     fun findAll(): List<Vape> {
-        return vapeRepository.findAll()
+        return vapeRepository.findAllActivated()
     }
 
     fun getAllCategories(): List<CategoryDto> {
@@ -47,12 +47,11 @@ class VapeService @Autowired constructor(
             "Десерты" to "icon-desserts.png",
             "Классика" to "icon-classic.png",
             "Напитки" to "icon-drinks.png",
-            "Растения" to "icon-plants.png",
             "Миксы" to "icon-mixes.png"
         )
 
         return categories.mapIndexed { index, (name, icon) ->
-            CategoryDto(
+            CategoryDto (
                 id = index.toLong(),
                 icon = IconDto(
                     url = "/$icon",
@@ -68,7 +67,7 @@ class VapeService @Autowired constructor(
 
     fun getCatalogBySlug(slug: String): CatalogResponse {
         val vapes = when (slug) {
-            "all" -> vapeRepository.findAll()
+            "all" -> vapeRepository.findAllActivated()
             "top" -> vapeRepository.getTop15()
             else -> vapeRepository.findAllBySort(slug)
         }
@@ -108,8 +107,5 @@ class VapeService @Autowired constructor(
             "mint" -> "<ul><li>Ментоловая свежесть</li></ul>"
             else -> "<ul><li>Описание отсутствует</li></ul>"
         }
-    }
-    fun getTop15(): List<Vape> {
-        return vapeRepository.getTop15()
     }
 }

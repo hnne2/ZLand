@@ -18,7 +18,6 @@ class MyTelegramBot(
     override fun getBotUsername(): String = botConfig.botUsername
 
     override fun onUpdateReceived(update: Update) {
-        println("111")
         val dispatcher = context.getBean(UpdateDispatcher::class.java)
         dispatcher.dispatch(update)
     }

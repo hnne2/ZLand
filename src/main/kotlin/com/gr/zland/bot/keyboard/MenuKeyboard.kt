@@ -1,11 +1,12 @@
 package com.gr.zland.bot.keyboard
 
+import com.gr.zland.model.RaffleSettings
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 
 @Component
-class MenuKeyboard {
+class MenuKeyboard () {
     fun create(): ReplyKeyboardMarkup {
         val keyboardMarkup = ReplyKeyboardMarkup().apply {
             resizeKeyboard = true

@@ -24,6 +24,7 @@ class MessageService(
     private val inlineKeyboard: InlineKeyboard,
 ) {
     val photoFile = File("/home/zland/java/uploads/a.jpg")
+    val pdfTop15 = File("/home/zland/java/uploads/Top15.pdf")
     fun sendWelcomeMessage(chatId: Long) {
         val message = SendMessage().apply {
             this.chatId = chatId.toString()
@@ -50,13 +51,13 @@ class MessageService(
                 Представляем вам Zland Mini – устройство, открывающее безграничный мир вкусов!
                 Zland Mini – это не просто девайс, это ключ к созданию своей собственной, уникальной вкусовой вселенной.
 
-                “Бесконечное разнообразие вкусов с Zland: создай свой идеальный микс!
+                Бесконечное разнообразие вкусов с Zland: создай свой идеальный микс!
             """.trimIndent()
             replyMarkup = InlineKeyboardMarkup().apply {
                 keyboard = listOf(
                     listOf(
                         InlineKeyboardButton().apply {
-                            text = "“ПОДРОБНЕЕ";
+                            text = "Подробнее";
                             webApp = WebAppInfo(miniAppUrl);
                         }
                     )
@@ -67,16 +68,22 @@ class MessageService(
     }
 
     fun sendFileWithTastes(chatId: Long) {
-//        val imageFile = createPdfGeneratorService.takePageScreenshot("https://zland.demo.onlinebees.ru/catalog/top")
-//
-//        val photo = SendPhoto().apply {
-//            this.chatId = chatId.toString()
-//            this.photo = InputFile(imageFile)
-//            this.caption = "Вот как выглядит страница сейчас 👇"
-//            this.replyMarkup = inlineKeyboard.createTastesKeyboard()
-//        }
-//
-//        execute(photo)
+        val photo = SendPhoto().apply {
+            this.chatId = chatId.toString()
+            photo = InputFile(photoFile)
+            caption = "Познакомьтесь с топ-15 миксовых сочетаний 👇"
+            replyMarkup = inlineKeyboard.createTastesKeyboard()
+        }
+        execute(photo)
+    }
+
+    fun sendPdfWithTastes(chatId: Long) {
+        val document = SendDocument().apply {
+            this.chatId = chatId.toString()
+            caption = "Вот PDF с топ-15 сочетаниями 🍹"
+             document = InputFile(pdfTop15)
+        }
+        execute(document)
     }
 
     fun requestLocation(chatId: Long) {
@@ -125,7 +132,7 @@ class MessageService(
                 keyboard = listOf(
                     listOf(
                         InlineKeyboardButton().apply {
-                            text = "участвовать";
+                            text = "Участвовать";
                             webApp = WebAppInfo(miniAppUrl);
                         }
                     )
